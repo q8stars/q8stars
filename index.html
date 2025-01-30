@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astro Adventures</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #111;
+      padding: 20px;
+    }
+    #game-container {
+      margin: 20px auto;
+      width: 90%;
+      max-width: 800px;
+    }
+    .sky-map {
+      border: 2px solid #fff;
+      background: url('https://via.placeholder.com/800x400?text=Star+Map') no-repeat center center;
+      background-size: cover;
+      height: 400px;
+      position: relative;
+    }
+    .constellation {
+      background-color: #fff;
+      color: #000;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: grab;
+      position: absolute;
+    }
+    .drop-zone {
+      border: 2px dashed #fff;
+      border-radius: 10px;
+      padding: 10px;
+      width: 150px;
+      height: 50px;
+      margin: 10px;
+      display: inline-block;
+      vertical-align: top;
+    }
+    .level {
+      display: none;
+    }
+    .level.active {
+      display: block;
+    }
+    .btn {
+      background-color: #555;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      margin: 10px;
+      border-radius: 5px;
+    }
+    .btn:hover {
+      background-color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Astro Adventures</h1>
+    <p>Explore the universe through engaging levels!</p>
+  </header>
+
+  <div id="game-container">
+    <!-- Level Navigation -->
+    <div id="level-navigation">
+      <button class="btn" onclick="showLevel(1)">Level 1: Constellation Explorer</button>
+      <button class="btn" onclick="showLevel(2)">Level 2: Stellar Classifier</button>
+      <button class="btn" onclick="showLevel(3)">Level 3: Image Processor</button>
+      <button class="btn" onclick="showLevel(4)">Level 4: Mission Planner</button>
+    </div>
+
+    <!-- Level 1: Constellation Explorer -->
+    <div class="level" id="level-1">
+      <h2>Level 1: Constellation Explorer</h2>
+      <p>Drag and drop constellations to their correct positions on the map!</p>
+      <div class="sky-map" id="sky-map">
+        <!-- Dynamic placement area -->
+      </div>
+      <div id="constellations">
+        <div class="constellation" draggable="true" id="orion">Orion</div>
+        <div class="constellation" draggable="true" id="ursa-major">Ursa Major</div>
+        <div class="constellation" draggable="true" id="cassiopeia">Cassiopeia</div>
+      </div>
+      <div id="drop-zones">
+        <div class="drop-zone" data-constellation="orion">Orion Zone</div>
+        <div class="drop-zone" data-constellation="ursa-major">Ursa Major Zone</div>
+        <div class="drop-zone" data-constellation="cassiopeia">Cassiopeia Zone</div>
+      </div>
+    </div>
+
+    <!-- Level 2: Stellar Classifier -->
+    <div class="level" id="level-2">
+      <h2>Level 2: Stellar Classifier</h2>
+      <p>Classify stars on the H-R diagram by dragging them to the correct region.</p>
+      <img src="https://via.placeholder.com/800x400?text=H-R+Diagram" alt="H-R Diagram">
+      <p>(Placeholder for interactive H-R Diagram)</p>
+    </div>
+
+    <!-- Level 3: Image Processor -->
+    <div class="level" id="level-3">
+      <h2>Level 3: Image Processor</h2>
+      <p>Adjust the image of the Orion Nebula to reveal its true beauty.</p>
+      <img src="https://via.placeholder.com/800x400?text=Orion+Nebula" alt="Orion Nebula">
+      <p>(Placeholder for interactive image adjustments)</p>
+    </div>
+
+    <!-- Level 4: Mission Planner -->
+    <div class="level" id="level-4">
+      <h2>Level 4: Mission Planner</h2>
+      <p>Design a space mission by selecting tools, locations, and objectives.</p>
+      <p>(Placeholder for mission planning interface)</p>
+    </div>
+  </div>
+
+  <script>
+    function showLevel(level) {
+      document.querySelectorAll('.level').forEach((lvl) => {
+        lvl.classList.remove('active');
+      });
+      document.getElementById(`level-${level}`).classList.add('active');
+    }
+
+    const constellations = document.querySelectorAll('.constellation');
+    const dropZones = document.querySelectorAll('.drop-zone');
+
+    constellations.forEach((item) => {
+      item.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text', e.target.id);
+      });
+    });
+
+    dropZones.forEach((zone) => {
+      zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
+
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const droppedId = e.dataTransfer.getData('text');
+        const droppedElement = document.getElementById(droppedId);
+
+        if (zone.getAttribute('data-constellation') === droppedId) {
+          zone.appendChild(droppedElement);
+          zone.style.backgroundColor = '#0f0';
+          droppedElement.draggable = false;
+          alert(`You placed ${droppedId} correctly!`);
+        } else {
+          alert('Wrong zone! Try again.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
